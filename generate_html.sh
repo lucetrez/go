@@ -1,6 +1,9 @@
 #!/bin/bash
 golinks_html=build/index.html
 
+# Create the build directory if it doesn't exist
+mkdir -p build
+
 # Create the HTML file using the JSON data
 cat <<EOL >$golinks_html
 <!DOCTYPE html>
@@ -42,9 +45,6 @@ echo "Generated $golinks_html successfully!"
 # Read the golinks.json file and extract the subpath and redirect-link key-value pairs
 subpaths=($(jq -r 'keys[]' golinks.json))
 redirect_links=($(jq -r '.[]' golinks.json))
-
-# Create the build directory if it doesn't exist
-mkdir -p build
 
 # Loop through the subpaths and create index.html for each one
 for ((i = 0; i < ${#subpaths[@]}; i++)); do
