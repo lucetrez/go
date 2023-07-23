@@ -42,14 +42,25 @@ jq -r '. | to_entries[] | "<tr><td><a href=\"/go" + .key + "\">/go" + .key + "</
 echo "</table></body></html>" >>$golinks_html
 echo "Generated $golinks_html successfully!"
 
-# Read the golinks.json file and extract the subpath and redirect-link key-value pairs
-subpaths=($(jq -r 'keys[]' golinks.json))
-redirect_links=($(jq -r '.[]' golinks.json))
+declare -A redirect_mapping
 
-# Loop through the subpaths and create index.html for each one
-for ((i = 0; i < ${#subpaths[@]}; i++)); do
-    subpath=${subpaths[$i]}
-    redirect_link=${redirect_links[$i]}
+# Assuming golinks.json contains a valid JSON object with keys and values.
+# For example:
+# {
+#   "subpath1": "redirect_link1",
+#   "subpath2": "redirect_link2",
+#   ...
+# }
+
+# Read the JSON file and populate the associative array
+while read -r subpath redirect_link; do
+    redirect_mapping["$subpath"]=$redirect_link
+done < <(jq -r 'to_entries[] | "\(.key) \(.value)"' golinks.json)
+
+# Iterate through the associative array to get the matching order
+for subpath in "${!redirect_mapping[@]}"; do
+    redirect_link="${redirect_mapping[$subpath]}"
+    echo "Subpath: $subpath, Redirect Link: $redirect_link"
 
     # Create the content for the index.html file
     content="<!DOCTYPE html>
