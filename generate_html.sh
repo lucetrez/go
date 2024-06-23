@@ -9,7 +9,7 @@ cat <<EOL >$golinks_html
 <!DOCTYPE html>
 <html>
 <head>
-    <title>lucetre GitHub Go Links</title>
+    <title>lucetrez GitHub Go Links</title>
     <style>
       table {
         border-collapse: collapse;
@@ -27,7 +27,6 @@ cat <<EOL >$golinks_html
     </style>
 </head>
 <body>
-    <h1>Redirect Server Subpaths</h1>
     <table>
         <tr>
             <th>Subpath</th>
